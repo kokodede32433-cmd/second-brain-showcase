@@ -1,0 +1,607 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Хаб и Мозг</title>
+<!--
+  Страница-презентация продукта: что такое Хаб и Мозг, с живым демо на выдуманных данных.
+  Самодостаточна: не ходит ни в хаб, ни в Мозг, настоящих заметок и проектов здесь нет.
+-->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=JetBrains+Mono:wght@500;600;700&display=swap">
+<style>
+/* Раскладка: одна колонка 1120px; единственный громкий элемент — «окно продукта» с вкладками, вокруг тихий текст. Палитра «Графит» хаба. */
+:root{
+  --bg:#111315;--paper:#181b1e;--paper2:#14171a;--ink:#eceef0;--ink2:#bfc4ca;--muted:#8a9097;--line:#33373c;--line2:#23272b;
+  --green:#6fd8a0;--amber:#f5a35f;--red:#ff7b6e;--blue:#86a4f5;--violet:#a795f2;--gold:#e4cd86;--teal:#6fd3cc;
+  --mono:"Geist Mono",ui-monospace,Menlo,monospace;--head:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --read:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --out:cubic-bezier(.22,1,.36,1);color-scheme:dark;
+}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){
+  --bg:#f4f5f6;--paper:#fbfbfc;--paper2:#f0f1f3;--ink:#1b1d21;--ink2:#474b52;--muted:#666b73;--line:#cfd3d8;--line2:#e3e6e9;
+  --green:#1a8a5a;--amber:#b85f0c;--red:#d0392b;--blue:#2f5bd8;--violet:#6a55d0;--gold:#96751a;--teal:#178a86;color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#f4f5f6;--paper:#fbfbfc;--paper2:#f0f1f3;--ink:#1b1d21;--ink2:#474b52;--muted:#666b73;--line:#cfd3d8;--line2:#e3e6e9;
+  --green:#1a8a5a;--amber:#b85f0c;--red:#d0392b;--blue:#2f5bd8;--violet:#6a55d0;--gold:#96751a;--teal:#178a86;color-scheme:light}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.6 var(--mono);letter-spacing:-.01em;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(60rem 30rem at 85% -5rem,color-mix(in srgb,var(--blue) 9%,transparent),transparent 70%)}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:8px}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px;padding-block:28px 90px}
+.eyebrow{font:500 11px/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+h1,h2,h3{font-family:var(--head);letter-spacing:-.04em;margin:0;text-wrap:balance}
+p{margin:0}
+.lede{font:17px/1.6 var(--read);letter-spacing:0;color:var(--ink2);max-width:58ch}
+.pill{display:inline-flex;align-items:center;gap:7px;height:26px;padding:0 11px;border:1px solid var(--line);border-radius:999px;font:500 11px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);white-space:nowrap}
+.pill i{width:7px;height:7px;border-radius:50%;background:var(--c,var(--muted))}
+.btn{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 18px;border:1px solid var(--line);border-radius:999px;font:500 12px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;text-decoration:none;color:var(--ink);transition:transform .2s var(--out),background .2s,border-color .2s}
+.btn:hover{transform:translateY(-1px);border-color:var(--ink2)}.btn:active{transform:scale(.97)}
+.btn.solid{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn.sm{height:30px;padding:0 13px;font-size:11px}
+.btn.danger{color:var(--red);border-color:transparent}.btn.danger:hover{background:color-mix(in srgb,var(--red) 12%,transparent)}
+.btn[disabled]{opacity:.4;cursor:default;transform:none}
+
+/* шапка */
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font:600 15px/1 var(--head)}
+.logo svg{color:var(--blue)}
+.top .sp{flex:1}
+.demo-flag{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
+
+/* первый экран */
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:36px;align-items:center;margin-top:54px}
+.hero h1{font-size:clamp(34px,5.4vw,58px);line-height:1.04;font-weight:700}
+.hero h1 em{font-style:normal;color:var(--blue)}
+.hero .lede{margin-top:20px}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.facts{display:flex;gap:26px;flex-wrap:wrap;margin-top:34px;padding-top:22px;border-top:1px solid var(--line2)}
+.facts b{display:block;font:600 22px/1.1 var(--head);font-variant-numeric:tabular-nums}
+.facts span{font-size:11.5px;color:var(--muted)}
+.orbit{position:relative;aspect-ratio:1;max-width:100%;min-width:0}
+.orbit svg{width:100%;height:100%;display:block;overflow:visible}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes breathe{50%{opacity:.35}}
+@keyframes dash{to{stroke-dashoffset:-34}}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}}
+.orbit .ring{transform-origin:200px 200px;animation:spin 90s linear infinite}
+.orbit .ring.r2{animation-duration:140s;animation-direction:reverse}
+.orbit .pulse{animation:breathe 3.2s ease-in-out infinite}
+
+/* разделы */
+section{margin-top:84px}
+.sec-head{display:grid;gap:10px;margin-bottom:26px}
+.sec-head h2{font-size:clamp(24px,3.4vw,34px);line-height:1.15}
+.pillars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.pillars>div{padding:26px 24px 28px 0;display:grid;gap:10px;align-content:start}
+.pillars>div+div{padding-left:24px;border-left:1px solid var(--line2)}
+.pillars h3{font-size:19px;display:flex;align-items:center;gap:9px}
+.pillars h3 i{width:9px;height:9px;border-radius:2px;background:var(--c)}
+.pillars p{font:14.5px/1.6 var(--read);letter-spacing:0;color:var(--ink2)}
+.pillars ul{margin:4px 0 0;padding:0;list-style:none;display:grid;gap:5px;font-size:12px;color:var(--muted)}
+.pillars li::before{content:"→ ";color:var(--c)}
+
+/* окно продукта */
+.stage{border:1px solid var(--line);border-radius:26px;background:var(--paper);overflow:hidden;box-shadow:0 30px 80px -40px color-mix(in srgb,var(--blue) 35%,transparent)}
+.tabs{display:flex;gap:6px;padding:12px;border-bottom:1px solid var(--line2);overflow-x:auto;scrollbar-width:none}
+.tabs button{display:flex;align-items:center;gap:8px;height:36px;padding:0 15px;border-radius:999px;border:1px solid transparent;font:500 12px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);white-space:nowrap;transition:color .2s,background .2s}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.tabs small{font-size:10px;opacity:.7}
+.pane{padding:22px;min-height:470px;animation:rise .35s var(--out)}
+.hint{font-size:11.5px;color:var(--muted);margin-bottom:14px}
+
+/* вкладка «Мозг» */
+.brain{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:18px;align-items:stretch}
+.map{position:relative;border:1px solid var(--line2);border-radius:20px;background:var(--paper2);min-width:0}
+.map svg{display:block;width:100%;height:auto}
+.node{cursor:pointer;transition:opacity .25s}
+.node.dim{opacity:.16}
+.node text{font:12px var(--mono);fill:var(--ink2);paint-order:stroke;stroke:var(--paper2);stroke-width:3px;opacity:0;transition:opacity .2s;pointer-events:none}
+.node.show text,.node:hover text,.node.area text{opacity:1}
+.node.area text{font:600 13px var(--head);letter-spacing:1.2px;fill:var(--ink)}
+.node .halo{opacity:0;transform-box:fill-box;transform-origin:center}
+.node.sel .halo{opacity:.9;animation:ping .7s ease-out 1,breathe 2.6s ease-in-out .7s infinite}
+@keyframes ping{from{transform:scale(.5);opacity:1}to{transform:scale(2.4);opacity:0}}
+.edge{fill:none;stroke:var(--line);stroke-width:1;opacity:.5;transition:opacity .25s}
+.edge.dim{opacity:.07}
+.edge.on{stroke:var(--gold);stroke-width:1.8;stroke-dasharray:8 6;opacity:1;animation:dash 3s linear infinite}
+.verb{font:500 11.5px var(--mono);fill:var(--gold);paint-order:stroke;stroke:var(--paper2);stroke-width:5px;pointer-events:none}
+.note{border:1px solid var(--line2);border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:12px;min-width:0;background:var(--paper)}
+.note h3{font-size:20px;line-height:1.25}
+.lead{padding:12px 15px;border-left:3px solid var(--c);border-radius:0 12px 12px 0;background:color-mix(in srgb,var(--c) 10%,transparent);font:500 14.5px/1.5 var(--read);letter-spacing:0}
+.lead b{display:block;font:600 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--c);margin-bottom:5px}
+.body{font:14px/1.62 var(--read);letter-spacing:0;color:var(--ink);display:grid;gap:6px}
+.body h4{display:flex;align-items:center;gap:8px;margin:10px 0 0;padding-top:12px;border-top:1px solid var(--line2);font:600 13px/1.3 var(--head);letter-spacing:-.02em}
+.body h4::before{content:"";width:7px;height:7px;border-radius:2px;background:var(--muted)}
+.body h4.key{color:var(--gold)}.body h4.key::before{background:var(--gold)}
+.rel{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:12px;border-top:1px solid var(--line2)}
+.rel button{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border:1px solid var(--line2);border-radius:999px;font-size:11.5px;color:var(--ink2);transition:transform .2s,border-color .2s}
+.rel button:hover{transform:translateX(2px);border-color:var(--ink2)}
+.rel i{width:6px;height:6px;border-radius:50%}
+.search{display:flex;gap:8px;margin-bottom:12px}
+.search input{flex:1;min-width:0;height:38px;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:var(--paper2);color:var(--ink);font:13px var(--mono)}
+.found{font-size:11.5px;color:var(--muted);min-height:18px;margin-bottom:8px}
+
+/* вкладка «Входящие» */
+.inbox{display:grid;grid-template-columns:230px minmax(0,1fr);gap:18px;align-items:start}
+.queue{display:grid;gap:6px}
+.queue button{text-align:left;padding:10px 12px;border:1px solid var(--line2);border-radius:14px;font-size:12.5px;color:var(--ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.queue button[aria-current="true"]{border-color:var(--ink);color:var(--ink);background:var(--paper2)}
+.queue button.done{opacity:.45;text-decoration:line-through}
+.item{border:1px solid var(--line2);border-radius:20px;padding:22px;display:grid;gap:14px;min-width:0}
+.prog{height:6px;border-radius:6px;background:var(--line2);overflow:hidden}
+.prog i{display:block;height:100%;background:var(--green);border-radius:6px;transition:width .5s var(--out)}
+.raw{font:400 19px/1.5 var(--mono);overflow-wrap:anywhere}
+.grid2{display:grid;grid-template-columns:84px minmax(0,1fr);gap:10px;align-items:center;font-size:13px}
+.grid2 b{font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{display:inline-flex;height:22px;align-items:center;padding:0 9px;border-radius:999px;border:1px solid var(--line2);font-size:11.5px;color:var(--ink2)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.acts .right{margin-left:auto}
+.ai{color:var(--blue);font-size:11.5px}
+
+/* вкладка «Хаб» */
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:680px}
+th{font:500 10.5px/1 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);text-align:left;padding:0 12px 12px}
+td{padding:14px 12px;border-top:1px solid var(--line2);vertical-align:middle;font-variant-numeric:tabular-nums}
+td b{font:600 14px var(--head);white-space:nowrap}td small{display:block;color:var(--muted);font-size:11px}
+.st{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 9px;border-radius:999px;font-size:11px;white-space:nowrap;background:color-mix(in srgb,var(--c) 13%,transparent);color:var(--c)}
+.metro{display:flex;align-items:center;gap:3px}
+.metro i{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--line)}
+.metro i.d{background:var(--green);border-color:var(--green)}.metro i.n{border-color:var(--gold);box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 22%,transparent)}
+.metro span{margin-left:8px;color:var(--muted);font-size:11px}
+.today{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:20px}
+.today div{border:1px solid var(--line2);border-radius:16px;padding:14px 16px;display:grid;gap:4px}
+.today b{font:600 13px var(--head);color:var(--c)}.today span{font:13px/1.45 var(--read);letter-spacing:0;color:var(--ink2)}
+
+/* вкладка «Агент» */
+.term{border:1px solid var(--line2);border-radius:18px;background:var(--paper2);padding:18px 20px;font-size:12.5px;line-height:1.65;display:grid;gap:12px;overflow-x:auto}
+.term .l{display:grid;grid-template-columns:74px minmax(0,1fr);gap:12px;animation:rise .4s var(--out) both}
+.term .who{font:500 10.5px/1.9 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.term .call{color:var(--blue)}.term .res{color:var(--ink2)}.term .say{font:14px/1.55 var(--read);letter-spacing:0;color:var(--ink)}
+.term code{font-family:var(--mono);color:var(--gold)}
+
+
+/* пошаговые объяснения «как это работает» */
+.walk{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:22px;align-items:start}
+.steps{display:grid;gap:6px}
+.steps button{display:grid;grid-template-columns:28px minmax(0,1fr);gap:4px 10px;text-align:left;padding:12px 14px;border:1px solid transparent;border-radius:16px;color:var(--muted);transition:background .2s,border-color .2s,color .2s}
+.steps button:hover{color:var(--ink2)}
+.steps button b{grid-row:span 2;width:24px;height:24px;border-radius:50%;border:1.5px solid currentColor;font:600 11px/21px var(--head);text-align:center}
+.steps button strong{font:600 14px/1.5 var(--head);letter-spacing:-.02em}
+.steps button span{display:none;font:13.5px/1.5 var(--read);letter-spacing:0;color:var(--ink2)}
+.steps button[aria-current="true"]{background:var(--paper);border-color:var(--line);color:var(--ink)}
+.steps button[aria-current="true"] b{background:var(--blue);border-color:var(--blue);color:var(--bg)}
+.steps button[aria-current="true"] span{display:block}
+.steps .play{display:inline-flex;align-items:center;justify-self:start;margin:6px 0 0 14px;padding:0 14px;height:30px;border:1px solid var(--line);border-radius:999px;font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
+.scene{border:1px solid var(--line);border-radius:22px;background:var(--paper);padding:22px;min-height:330px;display:grid;gap:14px;align-content:start;min-width:0;animation:rise .4s var(--out)}
+.scene .cap{font:500 10.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.bubble{justify-self:start;max-width:min(440px,100%);padding:12px 16px;border-radius:18px 18px 18px 4px;background:color-mix(in srgb,var(--blue) 16%,transparent);font:15px/1.5 var(--read);letter-spacing:0}
+.arrowrow{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:11.5px}
+.arrowrow::before{content:"";width:28px;height:1px;background:var(--line)}
+.file{margin:0;padding:16px 18px;border:1px solid var(--line2);border-radius:14px;background:var(--paper2);font:12.5px/1.7 var(--mono);color:var(--ink2);overflow-x:auto;white-space:pre}
+.file .k{color:var(--blue)}.file .h{color:var(--gold)}.file .m{color:var(--muted)}
+.rows{display:grid;gap:8px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 14px;border:1px solid var(--line2);border-radius:12px;font-size:12.5px;animation:rise .4s var(--out) both}
+.row small{display:block;color:var(--muted);font:12.5px/1.45 var(--read);letter-spacing:0}
+.row.hit{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 8%,transparent)}
+.bar{height:6px;width:90px;border-radius:6px;background:var(--line2);overflow:hidden}.bar i{display:block;height:100%;background:var(--gold);border-radius:6px}
+.tree{font:12.5px/1.9 var(--mono);color:var(--muted);white-space:pre;overflow-x:auto}
+.tree b{color:var(--ink);font-weight:500}.tree em{font-style:normal;color:var(--green)}
+.svgbox{overflow-x:auto}.svgbox svg{display:block;min-width:520px;width:100%;height:auto}
+.say{font:14px/1.6 var(--read);letter-spacing:0;color:var(--ink2);max-width:62ch}
+
+/* карта задачи из файла */
+.mapdemo{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:22px;align-items:start}
+.src{border:1px solid var(--line);border-radius:22px;background:var(--paper2);padding:18px 18px 14px;display:grid;gap:2px;font-size:12.5px;min-width:0}
+.src .fn{color:var(--muted);font-size:11px;margin-bottom:8px}
+.src button{display:grid;grid-template-columns:38px minmax(0,1fr);gap:6px;text-align:left;padding:5px 8px;border-radius:9px;color:var(--ink2);transition:background .15s}
+.src button:hover{background:color-mix(in srgb,var(--ink) 7%,transparent)}
+.src button i{font-style:normal;color:var(--muted)}.src button.done{color:var(--muted)}.src button.done span{text-decoration:line-through}.src button.done i{color:var(--green)}
+.src small{color:var(--muted);font-size:11px}
+.metro2{border:1px solid var(--line);border-radius:22px;background:var(--paper);padding:18px;min-width:0}
+.metro2 .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);margin-top:10px}
+.metro2 .legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.goal{font:14px/1.5 var(--read);letter-spacing:0;color:var(--ink);margin-bottom:8px}.goal b{color:var(--gold)}
+
+/* где смотреть и чем полезен */
+.pages{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:1px solid var(--line)}
+.pages>div{padding:20px 20px 4px 0;display:grid;gap:8px;align-content:start}
+.pages>div+div{padding-left:20px;border-left:1px solid var(--line2)}
+.pages code{font:500 12.5px var(--mono);color:var(--blue)}.pages h3{font-size:16px}
+.pages p{font:13.5px/1.55 var(--read);letter-spacing:0;color:var(--ink2)}
+.vs{display:grid;gap:0;border-top:1px solid var(--line)}
+.vs>div{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1fr) minmax(0,1fr);gap:20px;padding:18px 0;border-bottom:1px solid var(--line2);font:14px/1.55 var(--read);letter-spacing:0}
+.vs .hd{font:500 10.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:14px 0}
+.vs b{font:600 14px/1.4 var(--head);letter-spacing:-.02em}.vs .no{color:var(--muted)}.vs .yes{color:var(--ink)}
+.vs .yes::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--green);margin-right:9px}
+@media (max-width:900px){.walk,.mapdemo{grid-template-columns:minmax(0,1fr)}.pages{grid-template-columns:repeat(2,minmax(0,1fr))}.pages>div:nth-child(3){padding-left:0;border-left:0}
+  .vs>div{grid-template-columns:minmax(0,1fr);gap:6px}.vs .hd{display:none}.scene{min-height:0;padding:16px}}
+@media (max-width:520px){.pages{grid-template-columns:minmax(0,1fr)}.pages>div+div{padding-left:0;border-left:0;border-top:1px solid var(--line2)}}
+/* как устроено */
+.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;counter-reset:s}
+.flow>div{position:relative;padding:20px 22px 22px 0;border-top:2px solid var(--line);display:grid;gap:8px;align-content:start}
+.flow>div::before{counter-increment:s;content:counter(s);position:absolute;top:-13px;left:0;width:24px;height:24px;border-radius:50%;background:var(--bg);border:2px solid var(--blue);color:var(--blue);font:600 11px/20px var(--head);text-align:center}
+.flow h3{font-size:15px;margin-top:8px}.flow p{font:13.5px/1.55 var(--read);letter-spacing:0;color:var(--ink2)}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:start}
+.checks{display:grid;gap:14px;margin:0;padding:0;list-style:none}
+.checks li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px;font:14.5px/1.55 var(--read);letter-spacing:0;color:var(--ink2)}
+.checks li::before{content:"";width:9px;height:9px;margin-top:7px;border-radius:2px;background:var(--green)}
+.checks b{color:var(--ink);font-weight:600}
+pre{margin:0;padding:18px 20px;border:1px solid var(--line2);border-radius:18px;background:var(--paper);font:12.5px/1.75 var(--mono);overflow-x:auto;color:var(--ink2)}
+pre .c{color:var(--muted)}pre .k{color:var(--green)}
+footer{margin-top:84px;padding-top:22px;border-top:1px solid var(--line2);font-size:11.5px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
+
+@media (max-width:900px){
+  .hero,.brain,.two{grid-template-columns:minmax(0,1fr)}.hero{margin-top:34px}.orbit{max-width:420px;margin-inline:auto;width:100%}
+  .pillars{grid-template-columns:minmax(0,1fr)}.pillars>div{padding:22px 0}.pillars>div+div{padding-left:0;border-left:0;border-top:1px solid var(--line2)}
+  .inbox{grid-template-columns:minmax(0,1fr)}.flow{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:26px}
+  .today{grid-template-columns:minmax(0,1fr)}.pane{padding:16px;min-height:0}section{margin-top:64px}
+}
+@media (max-width:520px){.flow{grid-template-columns:minmax(0,1fr)}.raw{font-size:16px}.term .l{grid-template-columns:minmax(0,1fr);gap:2px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="logo"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="5" cy="17" r="2.2"/><circle cx="12" cy="7" r="2.2"/><circle cx="19" cy="15" r="2.2"/><path d="M6.4 15.2 10.6 8.8M13.8 8.4l3.8 4.9"/></svg>Хаб и Мозг</div>
+    <span class="sp"></span>
+    <span class="pill demo-flag">Демо · данные выдуманы</span>
+    <a class="btn sm" href="#demo">Смотреть демо</a>
+  </header>
+
+  <div class="hero">
+    <div>
+      <div class="eyebrow">Рабочее место студии, где работают люди и ИИ-агенты</div>
+      <h1 style="margin-top:14px">Все проекты и вся память студии — <em>на одном экране</em></h1>
+      <p class="lede">Хаб показывает, что происходит в каждом проекте: что не сохранено, что не отправлено и какой шаг следующий. Мозг хранит заметки, идеи и решения и отдаёт их агентам, чтобы они начинали работу с контекстом, а не с нуля.</p>
+      <div class="cta"><a class="btn solid" href="#demo">Попробовать демо</a><a class="btn" href="#brain-how">Как это работает</a></div>
+      <div class="facts">
+        <div><b>локально</b><span>хранилище и смысловой поиск</span></div>
+        <div><b>8</b><span>MCP-инструментов для агентов</span></div>
+        <div><b>2</b><span>части системы: Хаб и Мозг</span></div>
+      </div>
+    </div>
+    <div class="orbit" aria-hidden="true"><svg viewBox="0 0 400 400" id="heroOrbit"></svg></div>
+  </div>
+
+  <section>
+    <div class="sec-head"><div class="eyebrow">Из чего состоит</div><h2>Три части, которые работают вместе</h2></div>
+    <div class="pillars">
+      <div style="--c:var(--blue)"><h3><i></i>Хаб</h3><p>Локальный сайт со сводкой по всем проектам. Сам находит репозитории и планы задач в выбранных папках.</p><ul><li>несохранённая и неотправленная работа</li><li>карта задачи и путь до цели</li><li>страховочные копии без участия человека</li></ul></div>
+      <div style="--c:var(--green)"><h3><i></i>Мозг</h3><p>Хранилище заметок в обычных Markdown-файлах. Связи между записями видны на карте, поиск понимает смысл, а не только слова.</p><ul><li>входящие с разбором: тип, проект, теги</li><li>карта знаний со связями</li><li>личные записи закрыты от агентов</li></ul></div>
+      <div style="--c:var(--gold)"><h3><i></i>Агенты</h3><p>Claude Code, Codex и другие подключаются к Мозгу и получают память проекта: суть, стадию, следующий шаг и журнал.</p><ul><li>читают и ищут по смыслу</li><li>записывают, что сделано</li><li>каждое обращение к личному журналируется</li></ul></div>
+    </div>
+  </section>
+
+  <section id="demo">
+    <div class="sec-head"><div class="eyebrow">Живое демо</div><h2>Попробуйте сами: всё кликается</h2><p class="lede">Интерактивная демонстрация повторяет стиль и ключевые сценарии интерфейса. Проекты и данные выдуманы и существуют только на этой странице.</p></div>
+    <div class="stage">
+      <div class="tabs" role="tablist" aria-label="Экраны продукта">
+        <button role="tab" id="tab-brain" data-tab="brain" aria-selected="true">Мозг <small>карта знаний</small></button>
+        <button role="tab" id="tab-inbox" data-tab="inbox" aria-selected="false">Входящие <small id="inboxCount">4</small></button>
+        <button role="tab" id="tab-hub" data-tab="hub" aria-selected="false">Хаб <small>проекты</small></button>
+        <button role="tab" id="tab-git" data-tab="git" aria-selected="false">Git <small>ветки</small></button>
+        <button role="tab" id="tab-wayfinder" data-tab="wayfinder" aria-selected="false">Wayfinder <small>путь до цели</small></button>
+        <button role="tab" id="tab-agent" data-tab="agent" aria-selected="false">Агент <small>сессия</small></button>
+      </div>
+      <div class="pane" id="pane" role="tabpanel"></div>
+    </div>
+  </section>
+
+  <section id="brain-how">
+    <div class="sec-head"><div class="eyebrow">Как работает Мозг</div><h2>Путь одной мысли: от сообщения до ответа агенту</h2><p class="lede">Нажимайте на шаги слева или включите показ. Справа видно, что происходит с записью на каждом шаге.</p></div>
+    <div class="walk" id="walkBrain"></div>
+  </section>
+
+  <section id="git-how">
+    <div class="sec-head"><div class="eyebrow">Как работает Хаб</div><h2>Что хаб видит в ваших проектах и что с этим делает</h2><p class="lede">Хаб ничего не меняет сам. Он читает папки и git, раскладывает находки по смыслу и предлагает действие, которое подтверждает человек.</p></div>
+    <div class="walk" id="walkGit"></div>
+  </section>
+
+  <section id="map-how">
+    <div class="sec-head"><div class="eyebrow">Как рисуется карта задачи</div><h2>Схема строится из обычного текстового файла</h2><p class="lede">Слева файл плана, который ведут агенты. Справа схема, которую хаб рисует по нему. Отметьте тикет решённым — схема и путь до цели пересчитаются.</p></div>
+    <div class="mapdemo"><div class="src" id="mapSrc"></div><div class="metro2"><div class="goal" id="mapGoal"></div><div class="svgbox"><svg id="mapSvg" viewBox="0 0 640 250"></svg></div>
+      <div class="legend"><span><i style="background:var(--green)"></i>решено</span><span><i style="background:var(--gold)"></i>можно вести сейчас</span><span><i style="border:1.5px solid var(--line)"></i>ждёт других</span><span style="color:var(--gold)">━ путь до цели</span></div></div></div>
+  </section>
+
+  <section id="where">
+    <div class="sec-head"><div class="eyebrow">Где это смотреть</div><h2>Четыре страницы в браузере и сводка в Telegram</h2></div>
+    <div class="pages">
+      <div><code>localhost:7777</code><h3>Студия</h3><p>Все проекты и их карты задач. Видно, что делать сегодня и где работа встала.</p></div>
+      <div><code>/git</code><h3>Git студии</h3><p>Несохранённое, неотправленное и карта веток по каждому проекту. Отсюда же коммит и отправка.</p></div>
+      <div><code>/brain</code><h3>Мозг</h3><p>Карта знаний: кластеры, записи и связи. Двойной клик открывает запись, поиск понимает смысл.</p></div>
+      <div><code>/inbox</code><h3>Входящие</h3><p>Очередь сырых записей на разбор: подтвердить, поправить или удалить с клавиатуры.</p></div>
+    </div>
+    <p class="hint" style="margin-top:18px">Утром хаб присылает в Telegram короткую сводку по всем проектам, а о срочном (секрет в коде, агент ждёт ответа) пишет сразу.</p>
+  </section>
+
+  <section id="why">
+    <div class="sec-head"><div class="eyebrow">Чем это полезно</div><h2>Четыре ситуации, которые перестают случаться</h2></div>
+    <div class="vs">
+      <div class="hd"><span>Ситуация</span><span>Без хаба и Мозга</span><span>С ними</span></div>
+      <div><b>Агент начинает новую сессию</b><span class="no">Полчаса объясняете заново, что это за проект и на чём остановились.</span><span class="yes">Агент сам читает суть, стадию и следующий шаг за один запрос.</span></div>
+      <div><b>Работа за неделю в десяти проектах</b><span class="no">Что-то не сохранено, что-то не отправлено. Узнаёте, когда уже потеряли.</span><span class="yes">Одна страница показывает всё несохранённое и неотправленное. Страховочные копии снимаются сами.</span></div>
+      <div><b>Мысль пришла в дороге</b><span class="no">Осталась в мессенджере и забылась.</span><span class="yes">Сообщение боту попадает во «Входящие», получает проект и теги и встаёт на карту.</span></div>
+      <div><b>Ключ или пароль в коде</b><span class="no">Уезжает в репозиторий вместе с коммитом.</span><span class="yes">Хаб помечает файл как секрет и не даёт закоммитить без явного подтверждения.</span></div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="sec-head"><div class="eyebrow">Как это устроено</div><h2>От мысли в телефоне до агента, который в курсе</h2></div>
+    <div class="flow">
+      <div><h3>Записали</h3><p>Мысль приходит из Telegram, из хаба или от агента. Она попадает во «Входящие» как есть.</p></div>
+      <div><h3>Разобрали</h3><p>Недорогая модель предлагает тип, проект и теги. Человек подтверждает одним нажатием или правит.</p></div>
+      <div><h3>Связали</h3><p>Запись встаёт на карту рядом с проектом. Связи «содержит», «основа для», «продолжает» видны стрелками.</p></div>
+      <div><h3>Использовали</h3><p>Агент перед работой читает карточку проекта, а после — записывает, что сделал и какой шаг следующий.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="two">
+      <div>
+        <div class="sec-head"><div class="eyebrow">Почему этому можно доверять</div><h2>Всё лежит на вашем компьютере</h2></div>
+        <ul class="checks">
+          <li><span><b>Только локально.</b> Хаб и Мозг слушают адрес 127.0.0.1. Из сети их не видно.</span></li>
+          <li><span><b>Обычные файлы.</b> Заметки — это Markdown в папке. Их можно открыть любым редактором и забрать с собой.</span></li>
+          <li><span><b>Смысловой поиск без облака.</b> Модель для поиска работает на этом же компьютере.</span></li>
+          <li><span><b>Личное закрыто.</b> Агент видит личные записи только по прямой просьбе человека, и каждый такой случай остаётся в журнале.</span></li>
+          <li><span><b>Действия подтверждает человек.</b> Коммит, отправку и удаление хаб сам не делает.</span></li>
+        </ul>
+      </div>
+      <div>
+        <div class="sec-head"><div class="eyebrow">Установка</div><h2>Две команды</h2></div>
+        <pre><span class="c"># хаб: карты и git всех проектов</span>
+<span class="k">python3</span> hub/hub.py --install
+
+<span class="c"># Мозг: память и подключение агентов</span>
+<span class="k">uv run</span> second-brain install
+
+<span class="c"># дальше всё открывается в браузере</span>
+http://localhost:7777</pre>
+        <p class="hint" style="margin-top:12px">Нужны macOS, Python 3.12 и uv. Хаб работает также на Windows и Linux.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer><span>Хаб и Мозг · демонстрационная страница</span><span>Все проекты, заметки и цифры на ней выдуманы для показа</span></footer>
+</div>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const css=v=>`var(--${v})`;
+
+/* ---------- демо-данные: выдуманная студия ---------- */
+const AREAS=[{id:'games',name:'Игры',c:'blue',x:200,y:190},{id:'infra',name:'Инфраструктура',c:'violet',x:590,y:180},{id:'prod',name:'Продукты',c:'teal',x:400,y:470}];
+const NOTES=[
+ {id:'mayak',a:'games',t:'Маяк — аркада про смотрителя',k:'Проект',s:'Аркада на 20 уровней: игрок ведёт корабли сквозь туман лучом маяка.',b:[['Суть','Короткие сессии по две минуты. Главная механика — луч света, который открывает путь и одновременно привлекает шторм.'],['Что уже есть','Играбельны уровни 1–12, собран экран магазина, прошёл первый тест на восьми людях.'],['Следующий шаг','Пересобрать сложность уровней 8–12 по отзывам тестеров.',1]]},
+ {id:'fog',a:'games',t:'Механика света и тумана',k:'Идея',s:'Луч открывает клетки поля, туман возвращается через три хода.',b:[['Суть','Игрок всегда выбирает: светить дальше или удержать уже открытое.'],['Следующий шаг','Проверить на бумаге вариант с двумя лучами.',1]]},
+ {id:'balance',a:'games',t:'Баланс уровней 1–20',k:'Заметка',s:'Таблица сложности и правило: новый элемент не чаще одного на три уровня.',b:[['Суть','Сложность растёт ступенями. После каждой ступени идёт уровень-передышка.'],['Решение','Уровень 9 переносим на место 11: тестеры застревали на нём чаще всего.',1]]},
+ {id:'release',a:'games',t:'Релиз в сторе: чеклист',k:'Задача',s:'Девять пунктов до публикации, выполнено четыре.',b:[['Что уже есть','Иконка, описание, возрастной рейтинг, сборка под планшеты.'],['Следующий шаг','Снять пять скриншотов и записать ролик на 20 секунд.',1]]},
+ {id:'reviews',a:'games',t:'Отзывы тестеров, сентябрь',k:'Заметка',s:'Восемь человек, главная жалоба — резкий скачок сложности после восьмого уровня.',b:[['Суть','Пятеро из восьми бросили игру на уровнях 9–10. Обучение все прошли без подсказок.'],['Вывод','Проблема в порядке уровней, а не в механике.',1]]},
+ {id:'build',a:'infra',t:'Сервер сборок',k:'Проект',s:'Ночная сборка всех игр и отчёт к утру.',b:[['Суть','Один сервер собирает проекты по расписанию и складывает результат в общую папку.'],['Что уже есть','Сборка трёх игр, уведомление в Telegram при ошибке.'],['Следующий шаг','Добавить сборку под планшеты для «Маяка».',1]]},
+ {id:'backup',a:'infra',t:'Резервные копии: правило 3-2-1',k:'Заметка',s:'Три копии, два носителя, одна вне офиса.',b:[['Суть','Копии снимаются каждую ночь. Раз в месяц проверяем восстановление на чистой машине.']]},
+ {id:'monitor',a:'infra',t:'Мониторинг ночных сборок',k:'Заметка',s:'Что считать сбоем и кому писать.',b:[['Решение','Сбой — сборка дольше 40 минут или пустой результат. Пишем дежурному и в общий чат.',1]]},
+ {id:'mail',a:'infra',t:'Перенос почты',k:'Задача',s:'Переезд на новый домен до конца месяца.',b:[['Следующий шаг','Составить список ящиков и владельцев.',1]]},
+ {id:'herb',a:'prod',t:'Гербарий — определитель растений',k:'Проект',s:'Приложение: фото листа → название и уход.',b:[['Суть','Человек фотографирует растение и получает название, полив и освещение.'],['Что уже есть','Прототип на 120 видов, пять интервью с пользователями.'],['Следующий шаг','Собрать онбординг за 30 секунд и показать трём новым людям.',1]]},
+ {id:'onboard',a:'prod',t:'Онбординг за 30 секунд',k:'Идея',s:'Первый экран сразу открывает камеру, регистрация — после первого результата.',b:[['Суть','Польза раньше анкеты: сначала ответ, потом просьба создать аккаунт.']]},
+ {id:'price',a:'prod',t:'Тарифы и пробный период',k:'Заметка',s:'Семь дней бесплатно, дальше подписка.',b:[['Решение','Годовую подписку показываем первой: по интервью её выбирают чаще.',1]]},
+ {id:'interview',a:'prod',t:'Интервью с пользователями',k:'Заметка',s:'Пять разговоров: люди боятся залить растение.',b:[['Вывод','Главная ценность — напоминание о поливе, а не название растения.',1]]},
+];
+const LINKS=[['mayak','fog','содержит'],['mayak','balance','содержит'],['mayak','release','содержит'],['fog','balance','основа для'],['reviews','balance','основа для'],['build','monitor','содержит'],['build','backup','содержит'],['build','release','основа для'],['herb','onboard','содержит'],['herb','price','содержит'],['interview','onboard','основа для'],['interview','price','основа для']];
+const byId=id=>NOTES.find(n=>n.id===id),area=id=>AREAS.find(a=>a.id===id);
+// раскладка: записи по окружности вокруг своего кластера
+AREAS.forEach(a=>{const mine=NOTES.filter(n=>n.a===a.id);mine.forEach((n,i)=>{const ang=-Math.PI/2+i*2*Math.PI/mine.length+(a.id==='infra'?.5:a.id==='prod'?.3:0),r=n.k==='Проект'?78:128;n.x=a.x+Math.cos(ang)*r;n.y=a.y+Math.sin(ang)*r*.92;n.up=n.y<a.y})});
+
+/* ---------- орбита в шапке ---------- */
+(()=>{let s='';const C=200;
+  [[150,'blue',46,'ring'],[105,'green',28,'ring r2'],[62,'gold',14,'ring']].forEach(([r,c,n,cls])=>{s+=`<g class="${cls}"><circle cx="${C}" cy="${C}" r="${r}" fill="none" stroke="${css('line')}" stroke-width="1"/>`;
+    for(let i=0;i<n;i++){const a=i/n*Math.PI*2,big=i%7===0;s+=`<circle cx="${C+Math.cos(a)*r}" cy="${C+Math.sin(a)*r}" r="${big?4.5:2.4}" fill="${big?css(c):css('bg')}" stroke="${css(c)}" stroke-width="1.3" ${big?'class="pulse" style="animation-delay:'+(i*.13)+'s"':''}/>`}s+='</g>'});
+  s+=`<circle cx="${C}" cy="${C}" r="27" fill="${css('paper')}" stroke="${css('line')}"/><text x="${C}" y="${C+4}" text-anchor="middle" style="font:600 11px var(--head);letter-spacing:1px" fill="${css('ink')}">МОЗГ</text>`;
+  s+=`<text x="${C}" y="24" text-anchor="middle" style="font:500 10px var(--mono);letter-spacing:1.5px" fill="${css('muted')}">ПРОЕКТЫ · ЗАМЕТКИ · ИНСТРУМЕНТЫ АГЕНТОВ</text>`;
+  $('#heroOrbit').innerHTML=s})();
+
+/* ---------- вкладка «Мозг» ---------- */
+let chosen='mayak',query='';
+function brain(){
+  const near=new Set([chosen]);LINKS.forEach(([a,b])=>{if(a===chosen)near.add(b);if(b===chosen)near.add(a)});
+  const hit=n=>query&&(n.t+' '+n.s+' '+n.b.map(x=>x[1]).join(' ')).toLowerCase().includes(query);
+  let s='';
+  AREAS.forEach((a,i)=>{s+=`<radialGradient id="g${i}"><stop offset="0" stop-color="${css(a.c)}" stop-opacity=".13"/><stop offset="1" stop-color="${css(a.c)}" stop-opacity="0"/></radialGradient><circle cx="${a.x}" cy="${a.y}" r="190" fill="url(#g${i})"/>`});
+  NOTES.forEach(n=>{const a=area(n.a);s+=`<path class="edge dim" d="M${a.x} ${a.y}L${n.x} ${n.y}" stroke-dasharray="2 5"/>`});
+  LINKS.forEach(([a,b,v])=>{const p=byId(a),q=byId(b),on=a===chosen||b===chosen,dx=q.x-p.x,dy=q.y-p.y,l=Math.hypot(dx,dy),ex=q.x-dx/l*15,ey=q.y-dy/l*15,mx=(p.x+q.x)/2-dy*.12,my=(p.y+q.y)/2+dx*.12;
+    s+=`<path class="edge ${on?'on':'dim'}" d="M${p.x} ${p.y}Q${mx} ${my} ${ex} ${ey}" ${on?'marker-end="url(#arr)"':''}/>`;
+    if(on)s+=`<text class="verb" x="${(p.x+2*mx+ex)/4}" y="${(p.y+2*my+ey)/4}" text-anchor="middle" dominant-baseline="middle">${v}</text>`});
+  AREAS.forEach(a=>{s+=`<g class="node area" transform="translate(${a.x},${a.y})"><circle r="22" fill="none" stroke="${css(a.c)}" stroke-dasharray="1 6" stroke-width="1.5"/><rect x="-8" y="-8" width="16" height="16" rx="3" transform="rotate(45)" fill="${css(a.c)}"/><text y="40" text-anchor="middle">${a.name.toUpperCase()}</text></g>`});
+  NOTES.forEach(n=>{const c=css(area(n.a).c),sel=n.id===chosen,dim=query?!hit(n):!near.has(n.id),pr=n.k==='Проект';
+    s+=`<g class="node ${sel?'sel':''} ${dim?'dim':''} ${near.has(n.id)||hit(n)?'show':''}" data-n="${n.id}" transform="translate(${n.x},${n.y})" role="button" tabindex="0" aria-label="${esc(n.t)}"><circle r="20" fill="transparent"/><circle class="halo" r="14" fill="none" stroke="${c}"/>${pr?`<rect x="-9" y="-9" width="18" height="18" rx="4" fill="${css('paper2')}" stroke="${c}" stroke-width="1.8"/><rect x="-2.5" y="-2.5" width="5" height="5" fill="${c}"/>`:`<circle r="8" fill="${css('paper2')}" stroke="${c}" stroke-width="1.8"/><circle r="2.6" fill="${c}"/>`}<text y="${n.up?-15:24}" text-anchor="middle">${esc(n.t.length>24?n.t.slice(0,23)+'…':n.t)}</text></g>`});
+  const n=byId(chosen),c=css(area(n.a).c),rel=[...near].filter(i=>i!==chosen).map(byId),found=query?NOTES.filter(hit):[];
+  $('#pane').innerHTML=`<p class="hint">Нажмите на запись на карте — справа откроется её текст, а стрелки покажут, что из чего выросло.</p>
+  <div class="brain"><div><div class="search"><input id="q" type="search" placeholder="Поиск по смыслу: попробуйте «сложность» или «полив»" value="${esc(query)}" aria-label="Поиск по заметкам"></div>
+    <div class="found">${query?(found.length?`Найдено ${found.length}: `+found.slice(0,3).map(f=>esc(f.t)).join(' · '):'Ничего не найдено'):''}</div>
+    <div class="map"><svg viewBox="20 10 760 620" aria-label="Карта знаний"><defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="${css('gold')}"/></marker></defs>${s}</svg></div></div>
+   <article class="note"><div class="chips"><span class="pill" style="--c:${c}"><i></i>${area(n.a).name}</span><span class="pill">${n.k}</span></div>
+     <h3>${esc(n.t)}</h3><div class="lead" style="--c:${c}"><b>Суть</b>${esc(n.s)}</div>
+     <div class="body">${n.b.map(([h,t,key])=>`<h4 class="${key?'key':''}">${h}</h4><div>${esc(t)}</div>`).join('')}</div>
+     <div class="rel">${rel.map(r=>`<button data-n="${r.id}"><i style="background:${css(area(r.a).c)}"></i>${esc(r.t)}</button>`).join('')}</div></article></div>`;
+  const q=$('#q');q.oninput=()=>{query=q.value.trim().toLowerCase();const f=NOTES.filter(hit);if(f.length&&!f.includes(byId(chosen)))chosen=f[0].id;brain();const i=$('#q');i.focus();i.setSelectionRange(i.value.length,i.value.length)};
+}
+
+/* ---------- вкладка «Входящие» ---------- */
+const INBOX=[
+ {id:1,src:'Telegram',raw:'а что если в маяке сделать ночной режим — луч короче но очков вдвое больше',type:'идея',proj:'Маяк',conf:92,tags:['геймдизайн','режимы','сложность']},
+ {id:2,src:'агент',raw:'Сборка под планшеты падает на шаге упаковки: не хватает места на диске сервера. Нужно почистить старые сборки старше 14 дней.',type:'задача',proj:'Сервер сборок',conf:88,tags:['сборка','диск']},
+ {id:3,src:'Telegram',raw:'Аня с интервью: хочет, чтобы приложение само напоминало пересадить растение весной',type:'заметка',proj:'Гербарий',conf:74,tags:['интервью','напоминания']},
+ {id:4,src:'хаб',raw:'позвонить бухгалтеру насчёт договора с издателем',type:'задача',proj:'',conf:0,tags:['договор']},
+];
+let cur=0;const done=new Set(),gone=new Set();
+function inbox(){
+  const L=INBOX.filter(i=>!gone.has(i.id)),left=L.filter(i=>!done.has(i.id));
+  $('#inboxCount').textContent=left.length;if(cur>=L.length)cur=Math.max(0,L.length-1);const i=L[cur];
+  const total=INBOX.length,ready=done.size+gone.size;
+  $('#pane').innerHTML=`<p class="hint">Сюда попадает всё сырое. Разбор уже предложил тип, проект и теги — остаётся подтвердить.</p>`+(i?`
+  <div class="inbox"><div class="queue">${L.map((x,k)=>`<button data-k="${k}" aria-current="${k===cur}" class="${done.has(x.id)?'done':''}">${k+1}. ${esc(x.raw)}</button>`).join('')}</div>
+   <div class="item"><div class="prog" role="progressbar" aria-label="Разобрано" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${ready}"><i style="width:${ready/total*100}%"></i></div>
+    <div class="hint" style="margin:0">Разобрано ${ready} из ${total} · источник: ${i.src}</div>
+    <div class="raw">${esc(i.raw)}</div>
+    <div class="grid2"><b>Тип</b><div><span class="chip">${i.type}</span> <span class="ai">предложено разбором</span></div>
+      <b>Проект</b><div>${i.proj?`<span class="chip">${esc(i.proj)}</span> <span class="ai">уверенность ${i.conf}%</span>`:'<span class="chip">без проекта</span>'}</div>
+      <b>Теги</b><div class="chips">${i.tags.map(t=>`<span class="chip">${t}</span>`).join('')}</div></div>
+    <div class="acts">${done.has(i.id)?'<span class="st" style="--c:var(--green)">подтверждено · запись на карте</span>':`<button class="btn sm solid" data-act="ok">Подтвердить</button><button class="btn sm" data-act="lock">Закрыть от агентов</button>`}<button class="btn sm danger right" data-act="del">Удалить</button></div></div></div>`
+  :`<div class="item" style="text-align:center;padding:60px 20px"><h3>Входящие разобраны</h3><p class="hint" style="margin:8px 0 16px">Все записи разложены по проектам.</p><div><button class="btn sm" data-act="reset">Вернуть демо-записи</button></div></div>`);
+}
+
+/* ---------- вкладка «Хаб» ---------- */
+const PROJECTS=[
+ {n:'mayak',d:'Маяк · игра',br:'main',dirty:['3 файла не сохранено','amber'],push:['2 коммита не в облаке','amber'],map:[7,12],agent:['Claude Code работает · 12 мин','blue']},
+ {n:'herbarium',d:'Гербарий · приложение',br:'onboarding',dirty:['чисто','green'],push:['всё отправлено','green'],map:[4,9],agent:['ждёт ответа на вопрос','gold']},
+ {n:'build-server',d:'Сервер сборок',br:'main',dirty:['секрет в несохранённом файле','red'],push:['всё отправлено','green'],map:[2,5],agent:['—','muted']},
+ {n:'site',d:'Сайт студии',br:'main',dirty:['чисто','green'],push:['всё отправлено','green'],map:[6,6],agent:['—','muted']},
+ {n:'telegram-bot',d:'Бот для заметок',br:'без git',dirty:['история не хранится','muted'],push:['—','muted'],map:[1,4],agent:['Codex · завершил вчера','muted']},
+];
+function hub(){
+  $('#pane').innerHTML=`<p class="hint">Хаб сам обходит папки с проектами и каждое утро собирает сводку: что требует внимания сегодня.</p>
+  <div class="today"><div style="--c:var(--red)"><b>Секрет в коде</b><span>В build-server лежит файл с ключом. В коммит он не попадёт без подтверждения.</span></div>
+   <div style="--c:var(--amber)"><b>Не отправлено</b><span>В «Маяке» два коммита есть только на этом компьютере.</span></div>
+   <div style="--c:var(--gold)"><b>Агент ждёт</b><span>В «Гербарии» агент задал вопрос про экран камеры.</span></div></div>
+  <div class="tbl"><table><thead><tr><th>Проект</th><th>Ветка</th><th>Несохранённое</th><th>В облаке</th><th>Карта задачи</th><th>Агент</th></tr></thead><tbody>
+  ${PROJECTS.map(p=>`<tr><td><b>${p.n}</b><small>${p.d}</small></td><td>${p.br}</td><td><span class="st" style="--c:${css(p.dirty[1])}">${p.dirty[0]}</span></td><td><span class="st" style="--c:${css(p.push[1])}">${p.push[0]}</span></td>
+   <td><div class="metro">${Array.from({length:p.map[1]},(_,i)=>`<i class="${i<p.map[0]?'d':i===p.map[0]?'n':''}"></i>`).join('')}<span>${p.map[0]}/${p.map[1]}</span></div></td><td><span class="st" style="--c:${css(p.agent[1])}">${p.agent[0]}</span></td></tr>`).join('')}
+  </tbody></table></div><p class="hint" style="margin:14px 0 0">Точки — тикеты карты: зелёные решены, золотая — следующий шаг на пути до цели.</p>`;
+}
+
+/* ---------- вкладка «Агент» ---------- */
+const TALK=[
+ ['человек','say','Продолжи работу над «Маяком».'],
+ ['агент','call','project_brief(project="mayak")'],
+ ['Мозг','res','Суть: аркада на 20 уровней. Стадия: prototype. Следующий шаг: пересобрать сложность уровней 8–12 по отзывам тестеров. Последняя запись: «собран экран магазина».'],
+ ['агент','call','search("почему игроки бросают на девятом уровне")'],
+ ['Мозг','res','«Отзывы тестеров, сентябрь» → Вывод: проблема в порядке уровней, а не в механике. «Баланс уровней 1–20» → Решение: уровень 9 переносим на место 11.'],
+ ['агент','say','Контекст понятен. Переставляю уровни 9 и 11, добавляю уровень-передышку после восьмого и прогоняю тесты.'],
+ ['агент','call','log_progress(project="mayak", done="уровни 8–12 пересобраны, тесты зелёные", next="показать сборку трём тестерам")'],
+ ['Мозг','res','Записано в журнал проекта. Следующий шаг обновлён.'],
+];
+function agent(){
+  $('#pane').innerHTML=`<p class="hint">Так выглядит сессия агента, подключённого к Мозгу: он не спрашивает «что это за проект», а читает память и записывает результат.</p>
+  <div class="term">${TALK.map(([w,k,t],i)=>`<div class="l" style="animation-delay:${i*.12}s"><span class="who">${w}</span><span class="${k}">${k==='call'?'→ <code>'+esc(t)+'</code>':esc(t)}</span></div>`).join('')}</div>`;
+}
+
+/* ---------- пошаговые объяснения ---------- */
+function walk(sel,steps){const root=$(sel);let i=0,timer=null;
+  const draw=()=>{root.innerHTML=`<div class="steps">${steps.map((s,k)=>`<button data-step="${k}" aria-current="${k===i}"><b>${k+1}</b><strong>${s.t}</strong><span>${s.d}</span></button>`).join('')}<button class="play" data-play>${timer?'Пауза':'▶ Показать по шагам'}</button></div><div class="scene"><div class="cap">Шаг ${i+1} из ${steps.length} · ${steps[i].t}</div>${steps[i].v}</div>`};
+  const stop=()=>{clearInterval(timer);timer=null};
+  root.addEventListener('click',e=>{const b=e.target.closest('[data-step]');if(b){stop();i=+b.dataset.step;return draw()}
+    if(e.target.closest('[data-play]')){if(timer)stop();else{if(i===steps.length-1)i=0;else i++;timer=setInterval(()=>{if(i>=steps.length-1){stop()}else i++;draw()},3200)}draw()}});
+  draw()}
+const mdFile=`<span class="m">---</span>
+<span class="k">id</span>: nochnoy-rezhim
+<span class="k">type</span>: idea
+<span class="k">project</span>: mayak
+<span class="k">tags</span>: [геймдизайн, режимы, сложность]
+<span class="k">links</span>: [{to: mayak, rel: part_of}]
+<span class="m">---</span>
+<span class="h"># Ночной режим в «Маяке»</span>
+
+<span class="h">## Суть</span>
+Луч короче, очков вдвое больше.`;
+walk('#walkBrain',[
+ {t:'Записали',d:'Мысль отправлена боту в Telegram, набрана в хабе или создана агентом. Ничего заполнять не нужно.',
+  v:`<div class="bubble">а что если в маяке сделать ночной режим — луч короче но очков вдвое больше</div><div class="arrowrow">сообщение боту · 23:14</div><p class="say">Текст сохраняется как есть и встаёт в очередь «Входящих». Один и тот же текст дважды не появится.</p>`},
+ {t:'Разобрали',d:'Недорогая модель читает текст и предлагает тип, проект и теги. Решение остаётся за человеком.',
+  v:`<div class="rows"><div class="row"><div>Тип<small>идея, задача или заметка</small></div><span class="chip">идея</span></div><div class="row"><div>Проект<small>угадан по слову «маяк»</small></div><span class="chip">Маяк · 92%</span></div><div class="row"><div>Теги<small>для поиска и кластеров</small></div><span class="chips"><span class="chip">геймдизайн</span><span class="chip">режимы</span></span></div></div><p class="say">Если уверенность ниже половины, хаб просит проверить проект вручную.</p>`},
+ {t:'Сохранили как файл',d:'После подтверждения запись становится обычным Markdown-файлом со служебной шапкой.',
+  v:`<pre class="file">${mdFile}</pre><p class="say">Файл можно открыть любым редактором. Связь <code>part_of</code> говорит, что идея относится к проекту «Маяк».</p>`},
+ {t:'Разложили на разделы',d:'Текст режется по заголовкам. Для каждого раздела считается «смысловой отпечаток» — прямо на этом компьютере.',
+  v:`<p class="say">Запрос: <b style="color:var(--ink)">«почему игроки бросают на девятом уровне»</b></p><div class="rows"><div class="row hit" style="animation-delay:.05s"><div>Отзывы тестеров › Вывод<small>Проблема в порядке уровней, а не в механике.</small></div><div class="bar"><i style="width:91%"></i></div></div><div class="row" style="animation-delay:.15s"><div>Баланс уровней › Решение<small>Уровень 9 переносим на место 11.</small></div><div class="bar"><i style="width:78%"></i></div></div><div class="row" style="animation-delay:.25s"><div>Тарифы › Решение<small>Годовую подписку показываем первой.</small></div><div class="bar"><i style="width:9%"></i></div></div></div><p class="say">В найденном разделе нет слов «бросают» и «девятый», но смысл совпадает, поэтому он первый.</p>`},
+ {t:'Показали на карте',d:'Запись появляется рядом со своим проектом. Стрелки показывают, что из чего выросло.',
+  v:`<div class="svgbox"><svg viewBox="0 0 520 190"><defs><marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="${css('gold')}"/></marker></defs>
+   <path d="M120 95 Q210 40 330 62" fill="none" stroke="${css('gold')}" stroke-width="2" stroke-dasharray="8 6" marker-end="url(#a2)" style="animation:dash 3s linear infinite"/><path d="M120 95 Q220 150 330 138" fill="none" stroke="${css('line')}" stroke-width="1.2" stroke-dasharray="8 6" marker-end="url(#a2)"/>
+   <rect x="106" y="81" width="28" height="28" rx="6" fill="${css('paper2')}" stroke="${css('blue')}" stroke-width="2"/><text x="120" y="130" text-anchor="middle" style="font:500 12px var(--mono)" fill="${css('ink')}">Маяк</text>
+   <circle cx="345" cy="62" r="11" fill="${css('paper2')}" stroke="${css('gold')}" stroke-width="2"/><circle cx="345" cy="62" r="18" fill="none" stroke="${css('gold')}" opacity=".5" class="pulse"/><text x="366" y="66" style="font:500 12px var(--mono)" fill="${css('gold')}">Ночной режим · новая</text>
+   <circle cx="345" cy="138" r="9" fill="${css('paper2')}" stroke="${css('blue')}" stroke-width="2"/><text x="366" y="142" style="font:12px var(--mono)" fill="${css('ink2')}">Механика света и тумана</text>
+   <text x="215" y="48" text-anchor="middle" style="font:500 11px var(--mono)" fill="${css('gold')}">содержит</text></svg></div><p class="say">Чем больше связей у записи, тем крупнее её узел. Кластеры собираются по тегам и связям.</p>`},
+ {t:'Отдали агенту',d:'Агент подключён к Мозгу и получает память проекта по одному запросу.',
+  v:`<div class="term"><div class="l"><span class="who">агент</span><span class="call">→ <code>project_brief("mayak")</code></span></div><div class="l"><span class="who">Мозг</span><span class="res">Суть · стадия · следующий шаг · 5 последних записей журнала · связанные заметки, включая «Ночной режим».</span></div><div class="l"><span class="who">агент</span><span class="call">→ <code>log_progress("mayak", done="…", next="…")</code></span></div></div><p class="say">Личные записи агент не видит, пока человек прямо не попросит. Каждое такое обращение пишется в журнал.</p>`},
+]);
+walk('#walkGit',[
+ {t:'Обходит папки',d:'Вы один раз выбираете папки с проектами. Хаб сам находит в них репозитории и планы задач, в том числе новые.',
+  v:`<div class="tree">~/Projects/studio
+├─ <b>mayak/</b>          <em>git · карта задачи</em>
+├─ <b>herbarium/</b>      <em>git · карта задачи</em>
+├─ <b>build-server/</b>   <em>git</em>
+├─ <b>site/</b>           <em>git · карта задачи</em>
+├─ <b>telegram-bot/</b>   проект без git
+└─ node_modules/    пропущено</div><p class="say">Хаб только читает. Страницы обновляются сами, когда в папках что-то меняется.</p>`},
+ {t:'Сортирует несохранённое',d:'Каждому изменённому файлу хаб даёт категорию. От неё зависит, что он предложит сделать.',
+  v:`<div class="rows"><div class="row"><div>src/levels/level09.json<small>работа → предложит коммит</small></div><span class="st" style="--c:var(--blue)">работа</span></div><div class="row" style="animation-delay:.08s"><div>.env.production<small>ключ внутри → в коммит не попадёт без подтверждения</small></div><span class="st" style="--c:var(--red)">секрет</span></div><div class="row" style="animation-delay:.16s"><div>build/game.bundle.js<small>пересоздаётся сам → предложит добавить в .gitignore</small></div><span class="st" style="--c:var(--muted)">мусор</span></div><div class="row" style="animation-delay:.24s"><div>assets/trailer.mov · 412 МБ<small>слишком тяжёлый для репозитория</small></div><span class="st" style="--c:var(--amber)">большой файл</span></div><div class="row" style="animation-delay:.32s"><div>.scratch/release/map.md<small>план задачи, который ведут агенты</small></div><span class="st" style="--c:var(--gold)">карта</span></div></div>`},
+ {t:'Рисует карту веток',d:'По истории git хаб строит схему: какие ветки есть, где они разошлись и что ещё не отправлено.',
+  v:`<div class="svgbox"><svg viewBox="0 0 560 170"><path d="M40 50H420" stroke="${css('blue')}" stroke-width="2.5" fill="none"/><path d="M420 50H520" stroke="${css('amber')}" stroke-width="2.5" stroke-dasharray="6 5" fill="none"/><path d="M190 50C230 50 230 120 270 120H400" stroke="${css('violet')}" stroke-width="2.5" fill="none"/>
+   ${[40,115,190,270,345,420].map(x=>`<circle cx="${x}" cy="50" r="6.5" fill="${css('paper')}" stroke="${css('blue')}" stroke-width="2.5"/>`).join('')}${[470,520].map(x=>`<circle cx="${x}" cy="50" r="6.5" fill="${css('amber')}"/>`).join('')}${[270,335,400].map(x=>`<circle cx="${x}" cy="120" r="6.5" fill="${css('paper')}" stroke="${css('violet')}" stroke-width="2.5"/>`).join('')}
+   <text x="40" y="26" style="font:600 12px var(--head)" fill="${css('blue')}">main</text><text x="270" y="148" style="font:600 12px var(--head)" fill="${css('violet')}">onboarding</text>
+   <path d="M420 30V72" stroke="${css('muted')}" stroke-dasharray="2 3"/><text x="414" y="22" text-anchor="end" style="font:11px var(--mono)" fill="${css('muted')}">в облаке до этой точки</text><text x="545" y="84" text-anchor="end" style="font:500 11px var(--mono)" fill="${css('amber')}">2 коммита не в облаке</text></svg></div><p class="say">Оранжевые точки — коммиты, которые есть только на этом компьютере. Одна кнопка отправляет их, после подтверждения.</p>`},
+ {t:'Снимает страховочные копии',d:'Пока вы работаете, хаб сам сохраняет снимки несохранённой работы. Рабочую папку и ветки они не трогают.',
+  v:`<div class="rows"><div class="row"><div>сегодня, 14:20<small>3 файла · уровни 9–11</small></div><span class="st" style="--c:var(--green)">снимок</span></div><div class="row" style="animation-delay:.08s"><div>сегодня, 11:05<small>1 файл · экран магазина</small></div><span class="st" style="--c:var(--green)">снимок</span></div><div class="row" style="animation-delay:.16s"><div>вчера, 19:40<small>7 файлов · перед правкой агента</small></div><span class="st" style="--c:var(--green)">снимок</span></div></div><p class="say">Если агент или человек испортил файлы до коммита, работу можно вернуть из снимка.</p>`},
+ {t:'Собирает сводку',d:'Всё, что требует внимания, сводится в короткий список на главной странице и в утреннем сообщении.',
+  v:`<div class="rows"><div class="row"><div>build-server<small>Секрет в несохранённом файле</small></div><span class="st" style="--c:var(--red)">срочно</span></div><div class="row" style="animation-delay:.08s"><div>mayak<small>2 коммита не в облаке, 3 файла не сохранено</small></div><span class="st" style="--c:var(--amber)">сегодня</span></div><div class="row" style="animation-delay:.16s"><div>herbarium<small>Агент ждёт ответа на вопрос</small></div><span class="st" style="--c:var(--gold)">ответить</span></div></div><p class="say">Коммит, отправку и удаление всегда запускает и подтверждает человек.</p>`},
+]);
+
+/* ---------- карта задачи из файла ---------- */
+const T=[{id:1,t:'Выбрать движок',d:[],ok:1},{id:2,t:'Прототип луча',d:[1],ok:1},{id:3,t:'Туман на поле',d:[2],ok:1},{id:4,t:'Экран магазина',d:[2],ok:1},{id:5,t:'Уровни 1–12',d:[3],ok:1},{id:6,t:'Тест на людях',d:[5],ok:1},{id:7,t:'Пересобрать сложность',d:[6],ok:0},{id:8,t:'Скриншоты и ролик',d:[4],ok:0},{id:9,t:'Релиз в сторе',d:[7,8],ok:0}];
+const tk=id=>T.find(t=>t.id===id);
+function mapDraw(){
+  const depth=t=>t.d.length?1+Math.max(...t.d.map(i=>depth(tk(i)))):0,left=t=>t.ok?0:1+Math.max(0,...t.d.map(i=>left(tk(i))));
+  const chain=new Set();let c=T[T.length-1];while(c&&!c.ok){chain.add(c.id);const nx=c.d.map(tk).filter(x=>!x.ok).sort((a,b)=>left(b)-left(a))[0];c=nx}
+  const cols={};T.forEach(t=>{t.dp=depth(t);(cols[t.dp]=cols[t.dp]||[]).push(t)});
+  Object.values(cols).forEach(col=>col.forEach((t,i)=>{t.x=60+t.dp*104;t.y=col.length===1?105:62+i*86;t.up=col.length===1?t.dp%2===0:i===0;t.st=col.length>1&&t.dp%2?14:0}));
+  let s='';T.forEach(t=>t.d.forEach(i=>{const p=tk(i),hot=chain.has(t.id)&&(chain.has(p.id)||p.ok)&&!t.ok&&(!p.ok?true:t.d.map(tk).every(x=>x.ok)||chain.has(p.id));const on=chain.has(t.id)&&chain.has(p.id);
+    s+=`<path d="M${p.x} ${p.y}C${(p.x+t.x)/2} ${p.y} ${(p.x+t.x)/2} ${t.y} ${t.x} ${t.y}" fill="none" stroke="${on?css('gold'):p.ok&&t.ok?css('green'):css('line')}" stroke-width="${on?3.5:2.5}"/>`}));
+  T.forEach(t=>{const ready=!t.ok&&t.d.every(i=>tk(i).ok),col=t.ok?css('green'):ready?css('gold'):css('line');
+    s+=`<g style="cursor:pointer" data-t="${t.id}">${ready?`<circle cx="${t.x}" cy="${t.y}" r="15" fill="none" stroke="${css('gold')}" opacity=".5" class="pulse"/>`:''}<circle cx="${t.x}" cy="${t.y}" r="9" fill="${t.ok?css('green'):css('paper')}" stroke="${col}" stroke-width="2.5"/><text x="${t.x}" y="${t.y+(t.up?-19-t.st:29+t.st)}" text-anchor="middle" style="font:${chain.has(t.id)?600:400} 11px var(--mono)" fill="${t.ok?css('muted'):css('ink')}">${t.id}. ${esc(t.t.length>17?t.t.slice(0,16)+'…':t.t)}</text></g>`});
+  $('#mapSvg').setAttribute('viewBox',`0 0 ${90+Math.max(...T.map(t=>t.x))} 210`);$('#mapSvg').innerHTML=s;
+  const n=chain.size,doneN=T.filter(t=>t.ok).length;
+  $('#mapGoal').innerHTML=n?`Решено ${doneN} из ${T.length}. До цели <b>${n} ${n===1?'шаг':n<5?'шага':'шагов'}</b>: ${[...chain].reverse().map(i=>esc(tk(i).t)).join(' → ')}`:`Все ${T.length} тикетов решены. <b>Цель достигнута.</b>`;
+  $('#mapSrc').innerHTML=`<div class="fn">mayak/.scratch/release/map.md</div>`+T.map(t=>`<button data-t="${t.id}" class="${t.ok?'done':''}"><i>${t.ok?'[x]':'[ ]'}</i><span>${t.id}. ${esc(t.t)}${t.d.length?` <small>← ${t.d.join(', ')}</small>`:''}</span></button>`).join('')+`<small style="margin-top:8px">Нажмите на строку, чтобы отметить тикет</small>`;
+}
+document.querySelector('.mapdemo').addEventListener('click',e=>{const b=e.target.closest('[data-t]');if(!b)return;const t=tk(+b.dataset.t);t.ok=t.ok?0:1;mapDraw()});
+mapDraw();
+
+/* ---------- вкладки и события ---------- */
+function git(){
+  $('#pane').innerHTML=`<p class="hint">Демо проекта «Маяк»: Git-древо показывает историю веток, локальные коммиты и несохранённую работу. Действия здесь не выполняются.</p>
+  <div class="today"><div style="--c:var(--blue)"><b>Ветка main</b><span>Последний коммит уже на удалённом сервере</span></div><div style="--c:var(--amber)"><b>2 коммита только локально</b><span>Готовы к отправке после проверки</span></div><div style="--c:var(--green)"><b>3 страховочные копии</b><span>Можно посмотреть дифф и восстановить файл</span></div></div>
+  <div class="scene"><div class="cap">Git-древо · проект «Маяк»</div><div class="svgbox"><svg viewBox="0 0 960 300" role="img" aria-label="Демонстрационное Git-древо: main, ветка уровней, локальные коммиты">
+    <path d="M72 100H768" stroke="${css('blue')}" stroke-width="3" fill="none"/><path d="M768 100H895" stroke="${css('amber')}" stroke-width="3" stroke-dasharray="9 7" fill="none"/>
+    <path d="M300 100C355 100 360 204 420 204H740" stroke="${css('violet')}" stroke-width="3" fill="none"/>
+    ${[72,184,300,438,570,768].map(x=>`<circle cx="${x}" cy="100" r="9" fill="${css('paper')}" stroke="${css('blue')}" stroke-width="3"/>`).join('')}
+    ${[822,895].map(x=>`<circle cx="${x}" cy="100" r="9" fill="${css('paper')}" stroke="${css('amber')}" stroke-width="3"/>`).join('')}
+    ${[420,570,740].map(x=>`<circle cx="${x}" cy="204" r="9" fill="${css('paper')}" stroke="${css('violet')}" stroke-width="3"/>`).join('')}
+    <text x="72" y="62" fill="${css('blue')}" style="font:600 18px var(--head)">main</text>
+    <text x="420" y="251" fill="${css('violet')}" style="font:600 17px var(--head)">levels/rebalance</text>
+    <text x="715" y="60" fill="${css('muted')}" style="font:12px var(--mono)">последний push</text>
+    <text x="765" y="144" fill="${css('amber')}" style="font:12px var(--mono)">2 коммита не отправлены</text>
+  </svg></div><div class="rows"><div class="row"><div>src/levels/level09.json<small>изменён · можно сохранить коммитом</small></div><span class="st" style="--c:var(--blue)">работа</span></div><div class="row"><div>.env.production<small>содержит секрет · требуется явное подтверждение</small></div><span class="st" style="--c:var(--red)">секрет</span></div></div></div>`;
+}
+function wayfinder(){
+  $('#pane').innerHTML=`<p class="hint">Карта Wayfinder читается из обычного файла плана. Нажмите на тикет, чтобы увидеть, как пересчитываются доступные шаги и путь до цели.</p><div class="mapdemo"><div class="src" id="stageMapSrc"></div><div class="metro2"><div class="goal" id="stageMapGoal"></div><div class="svgbox" id="stageMapBox"></div><div class="legend"><span><i style="background:var(--green)"></i>решено</span><span><i style="background:var(--gold)"></i>можно вести сейчас</span><span><i style="border:1.5px solid var(--line)"></i>ждёт других</span><span style="color:var(--gold)">━ путь до цели</span></div></div></div>`;
+  $('#stageMapSrc').innerHTML=$('#mapSrc').innerHTML;
+  $('#stageMapGoal').innerHTML=$('#mapGoal').innerHTML;
+  $('#stageMapBox').innerHTML=$('#mapSvg').outerHTML.replace('id="mapSvg"','id="stageMapSvg"');
+}
+const VIEWS={brain,inbox,hub,git,wayfinder,agent};let tab='brain';
+function show(t){tab=t;document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===t));$('#pane').setAttribute('aria-labelledby','tab-'+t);$('#pane').style.animation='none';void $('#pane').offsetWidth;$('#pane').style.animation='';VIEWS[t]()}
+document.querySelector('.tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(b)show(b.dataset.tab)});
+$('#pane').addEventListener('click',e=>{
+  const ticket=e.target.closest('[data-t]');if(ticket&&tab==='wayfinder'){const t=tk(+ticket.dataset.t);t.ok=t.ok?0:1;mapDraw();return wayfinder()}
+  const n=e.target.closest('[data-n]');if(n){chosen=n.dataset.n;query='';return brain()}
+  const k=e.target.closest('[data-k]');if(k){cur=+k.dataset.k;return inbox()}
+  const a=e.target.closest('[data-act]');if(!a)return;const L=INBOX.filter(i=>!gone.has(i.id)),i=L[cur];
+  if(a.dataset.act==='ok'||a.dataset.act==='lock'){done.add(i.id);const nx=L.findIndex(x=>!done.has(x.id));if(nx>=0)cur=nx}
+  if(a.dataset.act==='del'){gone.add(i.id);done.delete(i.id)}
+  if(a.dataset.act==='reset'){gone.clear();done.clear();cur=0}
+  inbox()});
+$('#pane').addEventListener('keydown',e=>{const n=e.target.closest('.node[data-n]');if(n&&(e.key==='Enter'||e.key===' ')){e.preventDefault();chosen=n.dataset.n;brain()}});
+const params=new URLSearchParams(location.search),first=params.get('tab');show(VIEWS[first]?first:'brain');
+if(params.get('focus')==='demo')requestAnimationFrame(()=>$('#demo').scrollIntoView({block:'start'}));
+})();
+</script>
